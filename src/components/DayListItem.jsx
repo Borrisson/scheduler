@@ -16,8 +16,8 @@ export default function DayListItem({
   }
 
   const classStyle = classNames("day-list__item", {
-    ["day-list__item--selected"]: selected,
-    ["day-list__item--full"]: !spots,
+    "day-list__item--selected": selected,
+    "day-list__item--full": !spots,
   });
 
   return (
