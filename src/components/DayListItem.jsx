@@ -11,14 +11,19 @@ export default function DayListItem({
   setDay,
   ...rest
 }) {
+  function formatSpots(spots) {
+    return `${!spots ? "no" : spots} spot${spots !== 1 ? "s" : ""} remaining`;
+  }
+
   const classStyle = classNames("day-list__item", {
     ["day-list__item--selected"]: selected,
     ["day-list__item--full"]: !spots,
   });
+
   return (
     <li className={classStyle} onClick={() => setDay(name)}>
       <h2 className="text--regular">{name}</h2>
-      <h3 className="text--light">{spots}</h3>
+      <h3 className="text--light">{formatSpots(spots)}</h3>
     </li>
   );
 }
