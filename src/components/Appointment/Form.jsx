@@ -18,8 +18,7 @@ export default function Form(props) {
 
   const submit = (event) => {
     event.preventDefault();
-    props.onSave();
-    reset();
+    props.onSave(name, interviewer);
   };
 
   return (
