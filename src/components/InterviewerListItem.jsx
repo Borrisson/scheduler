@@ -5,7 +5,6 @@ import classNames from "classnames";
 import "./InterviewerListItem.scss";
 
 export default function InterviewerListItem({
-  id,
   name,
   avatar,
   selected,
@@ -17,7 +16,7 @@ export default function InterviewerListItem({
   });
 
   return (
-    <li key={id} onClick={() => setInterviewer(name)} className={classStyle}>
+    <li onClick={() => setInterviewer(name)} className={classStyle}>
       <img className="interviewers__item-image" src={avatar} alt={name} />
       {selected && name}
     </li>
