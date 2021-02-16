@@ -5,11 +5,8 @@ import { action } from "@storybook/addon-actions";
 
 import "index.scss";
 
+// <---------- Button ----------->
 import Button from "components/Button.jsx";
-
-import DayListItem from "components/DayListItem";
-
-import DayList from "components/DayList";
 
 storiesOf("Button", module)
   .addParameters({
@@ -27,6 +24,9 @@ storiesOf("Button", module)
     </Button>
   ));
 
+// <---------- DayListItem ----------->
+import DayListItem from "components/DayListItem";
+
 storiesOf("DayListItem", module)
   .addParameters({
     backgrounds: [{ name: "dark", value: "#222f3e", default: true }],
@@ -37,6 +37,9 @@ storiesOf("DayListItem", module)
   .add("Clickable", () => (
     <DayListItem name="Tuesday" setDay={action("setDay")} spots={5} />
   ));
+
+// <---------- DayList ----------->
+import DayList from "components/DayList";
 
 const days = [
   {
@@ -65,4 +68,41 @@ storiesOf("DayList", module)
   ))
   .add("Tuesday", () => (
     <DayList days={days} day={"Tuesday"} setDay={action("setDay")} />
+  ));
+
+// <---------- Interviewer ----------->
+import InterviewerListItem from "components/InterviewerListItem";
+
+const interviewer = {
+  id: 1,
+  name: "Sylvia Palmer",
+  avatar: "https://i.imgur.com/LpaY82x.png",
+};
+
+storiesOf("InterviewerListItem", module)
+  .addParameters({
+    backgrounds: [{ name: "dark", value: "#222f3e", default: true }],
+  })
+  .add("Unselected", () => (
+    <InterviewerListItem
+      id={interviewer.id}
+      name={interviewer.name}
+      avatar={interviewer.avatar}
+    />
+  ))
+  .add("Selected", () => (
+    <InterviewerListItem
+      id={interviewer.id}
+      name={interviewer.name}
+      avatar={interviewer.avatar}
+      selected
+    />
+  ))
+  .add("Clickable", () => (
+    <InterviewerListItem
+      id={interviewer.id}
+      name={interviewer.name}
+      avatar={interviewer.avatar}
+      setInterviewer={action("setInterviewer")}
+    />
   ));
