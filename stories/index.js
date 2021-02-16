@@ -136,3 +136,14 @@ storiesOf("InterviewerList", module)
       onChange={action("setInterviewer")}
     />
   ));
+
+// <---------- Appointment ----------->
+
+import Appointment from "components/Appointment/index";
+
+storiesOf("Appointment", module)
+  .addParameters({
+    backgrounds: [{ name: "white", value: "#fff", default: true }],
+  })
+  .add("Appointment", () => <Appointment />)
+  .add("Appointment with Time", () => <Appointment time={"12pm"} />);
