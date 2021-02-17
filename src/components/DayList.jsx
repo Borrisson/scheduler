@@ -8,8 +8,8 @@ export default function DayList({ days, day, setDay, ...rest }) {
       key={id}
       name={name}
       spots={spots}
-      selected={day === id}
-      setDay={(event) => setDay(id)}
+      selected={day === name}
+      setDay={(event) => setDay(name)}
     />
   ));
   return <ul>{parsedDayList}</ul>;
