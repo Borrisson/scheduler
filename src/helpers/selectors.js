@@ -5,3 +5,9 @@ export function getAppointmentsForDay({ days, appointments }, filterDay) {
     ? filteredDay.appointments.map((id) => appointments[id])
     : [];
 }
+
+export function getInterview({ interviewers }, interview) {
+  return interview
+    ? { ...interview, interviewer: interviewers[interview.interviewer] }
+    : null;
+}
