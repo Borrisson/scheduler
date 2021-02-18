@@ -18,7 +18,7 @@ export default function Appointment({ time, interview, ...rest }) {
       <Header time={time} />
       {mode === "EMPTY" && <Empty onAdd={() => transition(CREATE)} />}
       {mode === SHOW && <Show {...interview} />}
-      {mode === CREATE && <Form interviewers={[]} />}
+      {mode === CREATE && <Form onCancel={() => back()} interviewers={[]} />}
     </article>
   );
 }
