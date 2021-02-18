@@ -32,19 +32,11 @@ export default function Application(props) {
       appointments,
     });
 
-    return axios
-      .put(`/api/appointments/${id}`, appointment)
-      .then(() => {
-        setState(...state);
-      })
-      .catch((err) => console.log(err));
+    return axios.put(`/api/appointments/${id}`, appointment);
   }
 
   function cancelInterview(id) {
-    return axios
-      .delete(`/api/appointments/${id}`)
-      .then(() => setState(...state))
-      .catch((err) => console.log(err));
+    return axios.delete(`/api/appointments/${id}`);
   }
 
   useEffect(() => {
