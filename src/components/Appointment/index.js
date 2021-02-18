@@ -23,6 +23,7 @@ export default function Appointment({
   const SAVING = "SAVING";
   const COMFIRM = "COMFIRM";
   const DELETING = "DELETING";
+  const EDIT = "EDIT";
 
   const { mode, transition, back } = useVisualMode(interview ? SHOW : EMPTY);
 
@@ -39,13 +40,17 @@ export default function Appointment({
     transition(DELETING);
     cancelInterview(id).then(() => transition(EMPTY));
   }
-
+  console.log(interview);
   return (
     <article className="appointment">
       <Header time={time} />
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
       {mode === SHOW && (
-        <Show {...interview} onDelete={() => transition(COMFIRM)} />
+        <Show
+          {...interview}
+          onDelete={() => transition(COMFIRM)}
+          onEdit={() => transition(EDIT)}
+        />
       )}
       {mode === CREATE && (
         <Form
@@ -58,6 +63,15 @@ export default function Appointment({
       {mode === DELETING && <Status message={"Deleting"} />}
       {mode === COMFIRM && (
         <Confirm id={id} onCancel={() => back()} onConfirm={remove} />
+      )}
+      {mode === EDIT && (
+        <Form
+          onCancel={() => back()}
+          name={interview.student}
+          interviewer={interview.interviewer.id}
+          interviewers={interviewers}
+          onSave={save}
+        />
       )}
     </article>
   );
