@@ -40,7 +40,7 @@ export default function Appointment({
     transition(DELETING);
     cancelInterview(id).then(() => transition(EMPTY));
   }
-  console.log(interview);
+
   return (
     <article className="appointment">
       <Header time={time} />
