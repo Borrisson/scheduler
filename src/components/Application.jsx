@@ -40,6 +40,13 @@ export default function Application(props) {
       .catch((err) => console.log(err.message));
   }
 
+  function cancelInterview(id) {
+    return axios
+      .delete(`/api/appointments/${id}`)
+      .then(() => setState(...state))
+      .catch((err) => console.log(err.message));
+  }
+
   useEffect(() => {
     Promise.all([
       axios.get("/api/days"),
@@ -68,6 +75,7 @@ export default function Application(props) {
         interview={interview}
         interviewers={dailyInterviewers}
         bookInterview={bookInterview}
+        cancelInterview={cancelInterview}
       />
     );
   });
