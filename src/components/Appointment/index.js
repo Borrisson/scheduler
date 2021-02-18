@@ -7,9 +7,11 @@ import useVisualMode from "hooks/useVisualMode";
 import Form from "./Form";
 
 export default function Appointment({
+  id,
   time,
   interview,
   interviewers,
+  bookInterview,
   ...rest
 }) {
   const EMPTY = "EMPTY";
@@ -18,13 +20,25 @@ export default function Appointment({
 
   const { mode, transition, back } = useVisualMode(interview ? SHOW : EMPTY);
 
+  function save(name, interviewer) {
+    const interview = {
+      student: name,
+      interviewer,
+    };
+    bookInterview(id, interview);
+  }
+
   return (
     <article className="appointment">
       <Header time={time} />
       {mode === "EMPTY" && <Empty onAdd={() => transition(CREATE)} />}
       {mode === SHOW && <Show {...interview} />}
       {mode === CREATE && (
-        <Form onCancel={() => back()} interviewers={interviewers} />
+        <Form
+          onCancel={() => back()}
+          interviewers={interviewers}
+          onSave={save}
+        />
       )}
     </article>
   );
