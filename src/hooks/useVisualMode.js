@@ -3,17 +3,17 @@ import { useState } from "react";
 export default function useVisualMode(initial) {
   const [mode, setMode] = useState(initial);
   const [history, setHistory] = useState([initial]);
+  const buffer = [...history];
 
   function transition(newMode, replacing = false) {
     if (replacing) {
-      history.pop();
+      buffer.pop();
     }
     setMode(newMode);
-    setHistory([...history, newMode]);
+    setHistory([...buffer, newMode]);
   }
 
   function back() {
-    const buffer = [...history];
     if (history.length > 1) {
       buffer.pop();
       setMode(buffer[buffer.length - 1]);
