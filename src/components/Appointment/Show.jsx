@@ -1,7 +1,6 @@
 import React from "react";
 
 export default function Show({
-  id,
   student,
   interviewer,
   onEdit,
@@ -29,7 +28,7 @@ export default function Show({
             className="appointment__actions-button"
             src="images/trash.png"
             alt="Delete"
-            onClick={() => onDelete(id)}
+            onClick={onDelete}
           />
         </section>
       </section>
