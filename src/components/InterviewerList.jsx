@@ -7,7 +7,7 @@ import "./InterviewerList.scss";
 export default function InterviewerList({ interviewers, value, onChange }) {
   const parsedInterviewers = interviewers.map(({ id, name, avatar }) => (
     <InterviewerListItem
-      id={id}
+      key={id}
       name={name}
       avatar={avatar}
       selected={id === value}
