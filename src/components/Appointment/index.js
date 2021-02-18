@@ -6,7 +6,12 @@ import Empty from "components/Appointment/Empty";
 import useVisualMode from "hooks/useVisualMode";
 import Form from "./Form";
 
-export default function Appointment({ time, interview, ...rest }) {
+export default function Appointment({
+  time,
+  interview,
+  interviewers,
+  ...rest
+}) {
   const EMPTY = "EMPTY";
   const SHOW = "SHOW";
   const CREATE = "CREATE";
@@ -18,7 +23,9 @@ export default function Appointment({ time, interview, ...rest }) {
       <Header time={time} />
       {mode === "EMPTY" && <Empty onAdd={() => transition(CREATE)} />}
       {mode === SHOW && <Show {...interview} />}
-      {mode === CREATE && <Form onCancel={() => back()} interviewers={[]} />}
+      {mode === CREATE && (
+        <Form onCancel={() => back()} interviewers={interviewers} />
+      )}
     </article>
   );
 }
