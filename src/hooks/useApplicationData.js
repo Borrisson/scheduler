@@ -10,8 +10,9 @@ export default function useApplicationData() {
 
   const setDay = (day) => setState({ ...state, day });
 
-  function setSpots(deleting = false) {
-    const toggle = deleting ? -1 : 1;
+  function setSpots(deleting = false, error = false) {
+    let toggle = deleting ? -1 : 1;
+    toggle = error ? 0 : toggle;
     const appointmentsForDay = getAppointmentsForDay(state, state.day);
     const spots = appointmentsForDay.length;
     const spotsRemaining =
@@ -25,6 +26,13 @@ export default function useApplicationData() {
       return { ...obj };
     });
     days.find((el, index) => index === currDay).spots = spotsRemaining;
+
+    error &&
+      setState({
+        ...state,
+        days,
+      });
+
     return days;
   }
 
@@ -50,10 +58,20 @@ export default function useApplicationData() {
   }
 
   function cancelInterview(id) {
+    const appointment = {
+      ...state.appointments[id],
+      interview: null,
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment,
+    };
+
     const days = setSpots(true);
 
     setState({
       ...state,
+      appointments,
       days,
     });
     return axios.delete(`/api/appointments/${id}`);
@@ -74,5 +92,5 @@ export default function useApplicationData() {
     });
   }, []);
 
-  return { state, setDay, bookInterview, cancelInterview };
+  return { state, setSpots, setDay, bookInterview, cancelInterview };
 }
