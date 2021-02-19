@@ -38,21 +38,17 @@ export default function Appointment({
     };
     transition(SAVING);
     bookInterview(id, interview)
+      .then(setSpots)
       .then(() => transition(SHOW))
-      .catch(() => {
-        setSpots(true, true);
-        transition(ERROR_SAVE, true);
-      });
+      .catch(() => transition(ERROR_SAVE, true));
   }
 
   function remove(id) {
     transition(DELETING);
     cancelInterview(id)
+      .then(setSpots)
       .then(() => transition(EMPTY))
-      .catch(() => {
-        setSpots(false, true);
-        transition(ERROR_DELETE, true);
-      });
+      .catch(() => transition(ERROR_DELETE, true));
   }
 
   return (

@@ -10,30 +10,27 @@ export default function useApplicationData() {
 
   const setDay = (day) => setState({ ...state, day });
 
-  function setSpots(deleting = false, error = false) {
-    let toggle = deleting ? -1 : 1;
-    toggle = error ? 0 : toggle;
-    const appointmentsForDay = getAppointmentsForDay(state, state.day);
-    const spots = appointmentsForDay.length;
-    const spotsRemaining =
-      spots -
-      appointmentsForDay
-        .map(({ interview }) => (interview ? 1 : 0))
-        .reduce((prev, curr) => prev + curr, toggle);
+  function setSpots() {
+    setState((prevState) => {
+      const appointmentsForDay = getAppointmentsForDay(
+        prevState,
+        prevState.day
+      );
+      const spots = appointmentsForDay.length;
+      const spotsRemaining =
+        spots -
+        appointmentsForDay
+          .map(({ interview }) => (interview ? 1 : 0))
+          .reduce((prev, curr) => prev + curr);
 
-    const currDay = state.days.findIndex(({ name }) => name === state.day);
-    const days = state.days.map((obj) => {
-      return { ...obj };
-    });
-    days.find((el, index) => index === currDay).spots = spotsRemaining;
-
-    error &&
-      setState({
-        ...state,
-        days,
+      const currDay = state.days.findIndex(({ name }) => name === state.day);
+      const days = state.days.map((obj) => {
+        return { ...obj };
       });
+      days.find((el, index) => index === currDay).spots = spotsRemaining;
 
-    return days;
+      return { ...prevState, days };
+    });
   }
 
   function bookInterview(id, interview) {
@@ -46,12 +43,9 @@ export default function useApplicationData() {
       [id]: appointment,
     };
 
-    const days = setSpots();
-
     setState({
       ...state,
       appointments,
-      days,
     });
 
     return axios.put(`/api/appointments/${id}`, appointment);
@@ -67,12 +61,9 @@ export default function useApplicationData() {
       [id]: appointment,
     };
 
-    const days = setSpots(true);
-
     setState({
       ...state,
       appointments,
-      days,
     });
     return axios.delete(`/api/appointments/${id}`);
   }
