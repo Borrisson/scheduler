@@ -101,15 +101,38 @@ export default function useApplicationData() {
 
     return axios.delete(`/api/appointments/${id}`);
   }
-
   useEffect(() => {
     const webSocket = new WebSocket("ws://localhost:8001");
+    webSocket.onopen = function (event) {
+      webSocket.send("ping");
+    };
+    webSocket.onmessage = function (event) {
+      const { type, interview, id } = JSON.parse(event.data);
+      if (type === SET_INTERVIEW) {
+        const appointment = {
+          ...state.appointments[id],
+          interview: { ...interview },
+        };
+        const appointments = {
+          ...state.appointments,
+          [id]: appointment,
+        };
+        console.log(state.appointments[id], { appointments });
+        // state.appointments[id] === { appointments } &&
+        //   dispatch({
+        //     type,
+        //     appointments,
+        //   });
+      }
+    };
+  });
+
+  useEffect(() => {
     Promise.all([
       axios.get("/api/days"),
       axios.get("/api/appointments"),
       axios.get("api/interviewers"),
-      webSocket,
-    ]).then(([days, appointments, interviewers, webSocket]) => {
+    ]).then(([days, appointments, interviewers]) => {
       dispatch({
         type: SET_APPLICATION_DATA,
         days: [...days.data],
