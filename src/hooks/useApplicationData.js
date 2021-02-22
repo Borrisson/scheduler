@@ -103,11 +103,13 @@ export default function useApplicationData() {
   }
 
   useEffect(() => {
+    const webSocket = new WebSocket("ws://localhost:8001");
     Promise.all([
       axios.get("/api/days"),
       axios.get("/api/appointments"),
       axios.get("api/interviewers"),
-    ]).then(([days, appointments, interviewers]) => {
+      webSocket,
+    ]).then(([days, appointments, interviewers, webSocket]) => {
       dispatch({
         type: SET_APPLICATION_DATA,
         days: [...days.data],
