@@ -82,11 +82,23 @@ export default {
           status: 204,
           statusText: "No Content",
         }),
+        ["/api/days/1"]: Promise.resolve({
+          status: 204,
+          statusText: "No Content",
+        }),
         ["/api/appointments/1"]: Promise.resolve({
           status: 204,
           statusText: "No Content",
         }),
+        ["/api/appointments/2"]: Promise.resolve({
+          status: 204,
+          statusText: "No Content",
+        }),
         ["/api/interviewers/1"]: Promise.resolve({
+          status: 204,
+          statusText: "No Content",
+        }),
+        ["/api/interviewers/2"]: Promise.resolve({
           status: 204,
           statusText: "No Content",
         }),
@@ -96,11 +108,23 @@ export default {
   delete: jest.fn((url) => {
     return (
       {
-        ["/api/days/2"]: Promise.resolve({
+        ["/api/days/1"]: Promise.resolve({
+          status: 204,
+          statusText: "No Content",
+        }),
+        ["/api/days/1"]: Promise.resolve({
+          status: 204,
+          statusText: "No Content",
+        }),
+        ["/api/appointments/1"]: Promise.resolve({
           status: 204,
           statusText: "No Content",
         }),
         ["/api/appointments/2"]: Promise.resolve({
+          status: 204,
+          statusText: "No Content",
+        }),
+        ["/api/interviewers/1"]: Promise.resolve({
           status: 204,
           statusText: "No Content",
         }),
