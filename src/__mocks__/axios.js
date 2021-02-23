@@ -93,4 +93,22 @@ export default {
       }[url] || new Error("Did not recieve correct url")
     );
   }),
+  delete: jest.fn((url) => {
+    return (
+      {
+        ["/api/days/2"]: Promise.resolve({
+          status: 204,
+          statusText: "No Content",
+        }),
+        ["/api/appointments/2"]: Promise.resolve({
+          status: 204,
+          statusText: "No Content",
+        }),
+        ["/api/interviewers/2"]: Promise.resolve({
+          status: 204,
+          statusText: "No Content",
+        }),
+      }[url] || new Error("Did not recieve correct url")
+    );
+  }),
 };
