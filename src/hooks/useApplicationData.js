@@ -41,7 +41,7 @@ export default function useApplicationData() {
     appointments: {},
     interviewers: {},
   });
-
+  let bookAppointment = false;
   const setDay = (day) => dispatch({ type: SET_DAY, day });
 
   function setSpots(appointments) {
@@ -69,18 +69,20 @@ export default function useApplicationData() {
       ...state.appointments[id],
       interview: { ...interview },
     };
+    bookAppointment = true;
     const appointments = {
       ...state.appointments,
       [id]: appointment,
     };
     const days = setSpots(appointments);
-    dispatch({
-      type: SET_INTERVIEW,
-      appointments,
-      days,
-    });
 
-    return axios.put(`/api/appointments/${id}`, appointment);
+    return axios.put(`/api/appointments/${id}`, appointment).then(() =>
+      dispatch({
+        type: SET_INTERVIEW,
+        appointments,
+        days,
+      })
+    );
   }
 
   function cancelInterview(id) {
@@ -88,44 +90,21 @@ export default function useApplicationData() {
       ...state.appointments[id],
       interview: null,
     };
+    bookAppointment = true;
     const appointments = {
       ...state.appointments,
       [id]: appointment,
     };
     const days = setSpots(appointments);
-    dispatch({
-      type: SET_INTERVIEW,
-      appointments,
-      days,
-    });
 
-    return axios.delete(`/api/appointments/${id}`);
+    return axios.delete(`/api/appointments/${id}`).then(() =>
+      dispatch({
+        type: SET_INTERVIEW,
+        appointments,
+        days,
+      })
+    );
   }
-  useEffect(() => {
-    const webSocket = new WebSocket("ws://localhost:8001");
-    webSocket.onopen = function (event) {
-      webSocket.send("ping");
-    };
-    webSocket.onmessage = function (event) {
-      const { type, interview, id } = JSON.parse(event.data);
-      if (type === SET_INTERVIEW) {
-        const appointment = {
-          ...state.appointments[id],
-          interview: { ...interview },
-        };
-        const appointments = {
-          ...state.appointments,
-          [id]: appointment,
-        };
-        console.log(state.appointments[id], { appointments });
-        // state.appointments[id] === { appointments } &&
-        //   dispatch({
-        //     type,
-        //     appointments,
-        //   });
-      }
-    };
-  });
 
   useEffect(() => {
     Promise.all([
@@ -142,5 +121,27 @@ export default function useApplicationData() {
     });
   }, []);
 
-  return { state, setSpots, setDay, bookInterview, cancelInterview };
+  useEffect(() => {
+    const webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
+    webSocket.onmessage = function (event) {
+      const { id, type, interview } = JSON.parse(event.data);
+      if (type === SET_INTERVIEW && bookAppointment) {
+        const appointment = {
+          ...state.appointments[id],
+          interview: interview,
+        };
+        const appointments = {
+          ...state.appointments,
+          [id]: appointment,
+        };
+        const days = setSpots(appointments);
+        dispatch({
+          type: SET_INTERVIEW,
+          appointments,
+          days,
+        });
+      }
+    };
+  }, [state, bookAppointment]);
+  return { state, setDay, bookInterview, cancelInterview };
 }
