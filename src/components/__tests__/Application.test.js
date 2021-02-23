@@ -13,11 +13,11 @@ afterEach(cleanup);
 
 describe("Application", () => {
   it("defaults to Monday and changes schedule when new day is selected", async () => {
-    const { getByText } = render(<Application />);
+    const { getByText, queryByText } = render(<Application />);
 
     await waitForElement(() => getByText("Monday"));
     fireEvent.click(getByText("Tuesday"));
     expect(getByText("Leopold Silvers")).toBeInTheDocument();
-    expect(() => getByText("Archie Cohen")).toThrow();
+    expect(queryByText("Archie Cohen")).toBeNull();
   });
 });
