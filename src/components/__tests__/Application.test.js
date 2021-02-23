@@ -18,6 +18,6 @@ describe("Application", () => {
     await waitForElement(() => getByText("Monday"));
     fireEvent.click(getByText("Tuesday"));
     expect(getByText("Leopold Silvers")).toBeInTheDocument();
-    expect(queryByText("Archie Cohen")).toBeNull();
+    expect(queryByText("Archie Cohen")).not.toBeInTheDocument();
   });
 });
