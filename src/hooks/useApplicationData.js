@@ -117,8 +117,9 @@ export default function useApplicationData() {
         });
       }
     };
-
-    webSocket.close();
+    return () => {
+      webSocket.close();
+    };
   });
   return { state, setDay, bookInterview, cancelInterview };
 }
