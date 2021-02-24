@@ -8,8 +8,6 @@ import reducer, {
   SET_INTERVIEW,
 } from "reducers/application";
 
-let counter = 0;
-
 export default function useApplicationData() {
   const [state, dispatch] = useReducer(reducer, {
     day: "Monday",
@@ -111,7 +109,6 @@ export default function useApplicationData() {
           ...state.appointments,
           [id]: appointment,
         };
-        console.log(state, counter++);
         const days = setSpots(appointments);
         dispatch({
           type: SET_INTERVIEW,
@@ -120,6 +117,8 @@ export default function useApplicationData() {
         });
       }
     };
+
+    webSocket.close();
   });
   return { state, setDay, bookInterview, cancelInterview };
 }
