@@ -22,6 +22,7 @@ export default function useApplicationData() {
       { days: state.days, appointments },
       state.day
     );
+
     const spots = appointmentsForDay.length;
     const spotsRemaining =
       spots -
@@ -96,6 +97,9 @@ export default function useApplicationData() {
     const webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
     webSocket.onmessage = function (event) {
       const { id, type, interview } = JSON.parse(event.data);
+      //state.days[0] is here to make sure we are never using the initial
+      //state, interview !== state.appointments[id].interview is to make sure
+      //the user making the change doesn't change the state once more
       if (
         type === SET_INTERVIEW &&
         state.days[0] &&

@@ -31,6 +31,7 @@ export default function Appointment({
 
   const { mode, transition, back } = useVisualMode(interview ? SHOW : EMPTY);
 
+  //websockets conditionals to prevent errors of showing incorrect modes
   useEffect(() => {
     if (interview && mode === EMPTY) {
       transition(SHOW);
