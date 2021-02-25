@@ -1,9 +1,5 @@
 export function getAppointmentsForDay({ days, appointments }, filterDay) {
-  const filteredDay = days.find((day) => day.name === filterDay);
-
-  return filteredDay
-    ? filteredDay.appointments.map((id) => appointments[id])
-    : [];
+  return filterDayFor("appointments", appointments, days, filterDay);
 }
 
 export function getInterview({ interviewers }, interview) {
@@ -13,9 +9,11 @@ export function getInterview({ interviewers }, interview) {
 }
 
 export function getInterviewersForDay({ days, interviewers }, filterDay) {
+  return filterDayFor("interviewers", interviewers, days, filterDay);
+}
+
+function filterDayFor(option, stateObj, days, filterDay) {
   const filteredDay = days.find((day) => day.name === filterDay);
 
-  return filteredDay
-    ? filteredDay.interviewers.map((id) => interviewers[id])
-    : [];
+  return filteredDay ? filteredDay[option].map((id) => stateObj[id]) : [];
 }
