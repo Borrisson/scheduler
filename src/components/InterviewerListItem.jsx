@@ -9,7 +9,6 @@ export default function InterviewerListItem({
   avatar,
   selected,
   setInterviewer,
-  ...rest
 }) {
   const classStyle = classNames("interviewers__item", {
     "interviewers__item--selected": selected,

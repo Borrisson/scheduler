@@ -17,7 +17,6 @@ export default function Appointment({
   bookInterview,
   cancelInterview,
   setSpots,
-  ...rest
 }) {
   const EMPTY = "EMPTY";
   const SHOW = "SHOW";

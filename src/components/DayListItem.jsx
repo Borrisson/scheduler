@@ -4,13 +4,7 @@ import classNames from "classnames";
 
 import "./DayListItem.scss";
 
-export default function DayListItem({
-  name,
-  spots,
-  selected,
-  setDay,
-  ...rest
-}) {
+export default function DayListItem({ name, spots, selected, setDay }) {
   function formatSpots(spots) {
     return `${!spots ? "no" : spots} spot${spots !== 1 ? "s" : ""} remaining`;
   }

@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Error({ message, onClose, ...rest }) {
+export default function Error({ message, onClose }) {
   return (
     <main className="appointment__card appointment__card--error">
       <section className="appointment__error-message">
