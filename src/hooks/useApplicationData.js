@@ -1,6 +1,5 @@
 import { useReducer, useEffect } from "react";
 import axios from "axios";
-import { getAppointmentsForDay } from "../helpers/selectors";
 
 import reducer, {
   SET_DAY,
@@ -17,25 +16,32 @@ export default function useApplicationData() {
   });
   const setDay = (day) => dispatch({ type: SET_DAY, day });
 
-  function setSpots(appointments) {
-    const appointmentsForDay = getAppointmentsForDay(
-      { days: state.days, appointments },
-      state.day
-    );
+  function setSpots(id, operator) {
+    const spotsAction =
+      {
+        incr: 1,
+        decr: -1,
+      }[operator] ||
+      new Error("Must provide correct operator either increment or decrement");
 
-    const spots = appointmentsForDay.length;
-    const spotsRemaining =
-      spots -
-      appointmentsForDay
-        .map(({ interview }) => (interview ? 1 : 0))
-        .reduce((prev, curr) => prev + curr);
+    //checks to see if this is an edit
+    if (operator === "decr" && state.appointments[id].interview) {
+      return state.days;
+    }
 
-    const currDay = state.days.findIndex(({ name }) => name === state.day);
-    const days = state.days.map((obj) => {
-      return { ...obj };
+    // updates spots
+    const bufferDays = state.days.map((day) => {
+      if (day.appointments.includes(id)) {
+        return {
+          ...day,
+          spots: day.spots + spotsAction,
+        };
+      } else {
+        return day;
+      }
     });
-    days.find((el, index) => index === currDay).spots = spotsRemaining;
-    return days;
+
+    return bufferDays;
   }
 
   function bookInterview(id, interview) {
@@ -47,7 +53,8 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment,
     };
-    const days = setSpots(appointments);
+
+    const days = setSpots(id, "decr", interview);
 
     return axios.put(`/api/appointments/${id}`, appointment).then(() =>
       dispatch({
@@ -67,7 +74,7 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment,
     };
-    const days = setSpots(appointments);
+    const days = setSpots(id, "incr");
 
     return axios.delete(`/api/appointments/${id}`).then(() =>
       dispatch({
@@ -113,7 +120,7 @@ export default function useApplicationData() {
           ...state.appointments,
           [id]: appointment,
         };
-        const days = setSpots(appointments);
+        const days = setSpots(id, interview ? "decr" : "incr");
         dispatch({
           type: SET_INTERVIEW,
           appointments,
