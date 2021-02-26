@@ -1,5 +1,6 @@
 import { useReducer, useEffect } from "react";
 import axios from "axios";
+import { appointmentCreator } from "../helpers/creators";
 
 import reducer, {
   SET_DAY,
@@ -16,7 +17,7 @@ export default function useApplicationData() {
   });
   const setDay = (day) => dispatch({ type: SET_DAY, day });
 
-  function setSpots(id, operator) {
+  const setSpots = (id, operator) => {
     const spotsAction =
       {
         incr: 1,
@@ -42,19 +43,15 @@ export default function useApplicationData() {
     });
 
     return bufferDays;
-  }
+  };
 
   function bookInterview(id, interview) {
-    const appointment = {
-      ...state.appointments[id],
-      interview: { ...interview },
-    };
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment,
-    };
-
-    const days = setSpots(id, "decr", interview);
+    const { appointment, appointments, days } = appointmentCreator(
+      state,
+      id,
+      setSpots,
+      interview
+    );
 
     return axios.put(`/api/appointments/${id}`, appointment).then(() =>
       dispatch({
@@ -66,15 +63,7 @@ export default function useApplicationData() {
   }
 
   function cancelInterview(id) {
-    const appointment = {
-      ...state.appointments[id],
-      interview: null,
-    };
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment,
-    };
-    const days = setSpots(id, "incr");
+    const { appointments, days } = appointmentCreator(state, id, setSpots);
 
     return axios.delete(`/api/appointments/${id}`).then(() =>
       dispatch({
@@ -112,15 +101,12 @@ export default function useApplicationData() {
         state.days[0] &&
         interview !== state.appointments[id].interview
       ) {
-        const appointment = {
-          ...state.appointments[id],
-          interview: interview,
-        };
-        const appointments = {
-          ...state.appointments,
-          [id]: appointment,
-        };
-        const days = setSpots(id, interview ? "decr" : "incr");
+        const { appointments, days } = appointmentCreator(
+          state,
+          id,
+          setSpots,
+          interview
+        );
         dispatch({
           type: SET_INTERVIEW,
           appointments,
