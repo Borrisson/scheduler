@@ -94,13 +94,8 @@ export default function useApplicationData() {
     webSocket.onmessage = function (event) {
       const { id, type, interview } = JSON.parse(event.data);
       //state.days[0] is here to make sure we are never using the initial
-      //state, interview !== state.appointments[id].interview is to make sure
-      //the user making the change doesn't change the state once more
-      if (
-        type === SET_INTERVIEW &&
-        state.days[0] &&
-        interview !== state.appointments[id].interview
-      ) {
+      //state
+      if (type === SET_INTERVIEW && state.days[0]) {
         const { appointments, days } = appointmentCreator(
           state,
           id,
